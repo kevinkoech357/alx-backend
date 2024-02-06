@@ -11,7 +11,6 @@ from flask_babel import Babel
 
 
 app = Flask(__name__)
-babel = Babel()
 
 
 class Config:
@@ -26,6 +25,8 @@ class Config:
 
 app.config.from_object(Config)
 
+babel = Babel(app)
+
 
 @babel.localeselector
 def get_locale():
@@ -35,15 +36,12 @@ def get_locale():
     return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
-babel.init_app(app)
-
-
 @app.route("/", methods=["GET"])
 def render_index():
     """
     Render index.html
     """
-    return render_template("2-index.html")
+    return render_template("3-index.html")
 
 
 if __name__ == "__main__":
