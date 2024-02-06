@@ -50,18 +50,11 @@ def get_locale():
     return request.accept_languages.best_match(app.config["LANGUAGES"])
 
 
-def get_user():
+def get_user(user_id):
     """
     Get user based on id.
     """
-    user = request.args.get("login_as")
-
-    if user:
-        try:
-            return users.get(int(user))
-        except Exception:
-            return None
-    return None
+    return users.get(user_id)
 
 
 @app.before_request
@@ -69,7 +62,11 @@ def before_request():
     """
     Add user to global scope.
     """
-    g.user = get_user()
+    user_id = request.args.get("login_as")
+    if user_id:
+        g.user = get_user(int(user_id))
+    else:
+        g.user = None
 
 
 @app.route("/", methods=["GET"])
